@@ -22,6 +22,11 @@ git提交代码到github步骤：
         git push -u origin master
 
 
+注意：
+    1，如果提示  连接远程仓库，拉取代码时，提示 git@github.com:qingchengshanxia/Toolcode.git，则需要在github账户中，在setting中，找到SSH and GPG keys,打开新建一个SSH keys,其中，title随便取，key值取C:\Users\Administrator\.ssh中的id_rsa.pub的key。
+    2，如果提示 需要绑定hosts的警告，则 复制提示中的ip地址，并绑定到windows下面的hosts文件中，如：52.74.223.119 https://github.com
+
+
 一、新建代码库
 
 # 在当前目录新建一个Git代码库
