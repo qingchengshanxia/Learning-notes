@@ -1,0 +1,943 @@
+
+1、在cmd管理员权限下运行，
+
+    命令： mysql -V   -----显示版本号
+
+            mysql登陆：
+                1.mysql -uroot -p P3306 -h127.0.0.1  ----表示设置用户名为root，密码待定，端口号为3306。服务为127.0.0.1即本地服务
+                        -u  设置mysql用户名
+                        -p  设置密码
+                        -P  设置端口号
+                        -h  设置服务
+                2.mysql -hlocalhost -uroot -p;
+
+            cmd窗口显示： mysql> 表示登陆成功，进入了mysql服务，可以运行各种mysql命令；
+
+            mysql退出：
+                mysql> exit;
+                mysql> quit;
+                mysql> \q;
+
+
+            cls  ----windows下的清屏命令；
+
+
+            修改提示符命令：
+                mysql -uroot -pyourpassword --prompt  在这里设置提示符
+                prompt 在这里设置提示符
+
+            mysql提示符：
+                \D      完整的日期
+                \d      当前的数据库
+                \h      服务器名称
+                \u      当前用户
+
+                示例： prompt \u@\h \d>
+                结果提示符：root@localhost (none)>   其中none表示没有该数据库
+
+
+
+                use database    -----打开系统中为该名称的数据库
+
+
+            MYSQL常用命令：
+                SELECT VERSION();   ------ 显示当前服务器版本；
+                SELECT NOW();   ------显示当前日期时间;
+                SELECT USER();  ------显示当前用户；
+
+
+            MYSQL语法规范：
+                1，关键字和函数名称，要用大写；
+                2，数据库名字、表名称、字段名称，须小写；
+                3，SQL语句必须以‘分号’结尾;
+
+
+            MYSQL数据库操作命令：
+                SHOW WARNINGS;   ----- 查看警告信息
+                SHOW CREATE DATABASE db_name;     ------显示该数据库创建时的详细信息；
+                SHOW CREATE TABLE table_name;     ------显示该数据表创建时的详细信息；
+
+                SELECT * FROM table_name;         ------显示当前数据表中所有的数据；
+                DESC table_name;                  ------ 显示当前数据表的结构；
+
+
+                创建数据库：
+                    标准语句：CREATE { DATABASE | SCHEMA } [IF NOT EXISTS] db_name [DEFAULT] CHARACTER SET [=] charset_name;
+                    解释：{}大括号为必写，[]中括号为选写；
+                    这句话的意思是：创建一个数据库，如果不存在，则创建名为db_name的数据，并且，设置默认字符为charset_name；
+
+                修改数据库：
+                    标准语句： ALTER { DATABASE | SCHEMA } db_name [DEFAULT] CHARACTER SET [=] charset_name;
+
+                删除数据库：
+                    标准语句：DROP { DATABASE | SCHEMA } [IF EXISTS] db_name;
+
+
+
+            数据类型：
+
+                整数类型：           存储范围：         字节数：
+
+                TINYINT              -128 ~ 127            1
+                                 (无符号：0 ~ 225 )
+
+                SMALLINT            -32758 ~ 32767         2
+                                      (0 ~ 65535)
+
+                MEDIUMINT          -8388608 ~ 8388607      3
+                                      (0 ~ 16777215)
+
+                INT                   -2e+31 ~ 2e+31-1       4
+                                       (0 ~ 2e+24-1)
+
+                BIGINT               -2e+63 ~ 2e+63-1        8
+                                       (0 ~ 2e+64-1)
+
+
+
+
+                浮点数类型：             范围：                                  使用：
+
+                FLOAT[(M,D)]        -3.4...e+38 ~ -1.17...e-38              M是数字总位数，D是小数点后面的位数；
+                                    0 ~ 1.17...e-38 / 0 ~ 3.4...e+38        如果M和D被省略，则根据硬件允许的限制来保存值；
+                                                                            单精度浮点数精确到大约7位小数位；
+
+                DOUBEL[(M,D)]       -1.79...e+308 ~ -2.22...e-308
+                                    0 ~ 1.79...e+308/ 0 ~ 1.79...e+308
+
+
+
+
+                日期时间类型：     占用空间：        日期格式 ：           最小值：               最大值：             零值表示：
+                DATETIME           8 bytes      YYYY-MM-DD HH:MM:SS    1000-01-01 00:00:00   9999-12-31 23:59:59  0000-00-00 00:00:00
+                TIMESTAMP          4 bytes      YYYY-MM-DD HH:MM:SS     19700101080001       2038 年的某个时刻      00000000000000
+                DATE               4 bytes      YYYY-MM-DD                  1000-01-01              9999-12-31         0000-00-00
+                TIME               3 bytes      HH:MM:SS                   -838:59:59              838:59:59           00:00:00
+                YEAR               1 bytes      YYYY                            1901                 2155               0000
+
+
+
+
+                字符串类型：          字节：        描述及存储需求：
+                CHAR(M)                 M           M为0~255之间的整数
+                VARCHAR(M)                          M为0~65536之间的整数
+                TINYBLOB                            允许长度0~255字节
+                BLOB                                允许长度0~65535字节
+                MEDUIMBLOB                          允许长度0~167772150字节
+                LONGBLOB                            允许长度0~4294967295
+                TINYTEXT                            允许长度0~255字节
+                TEXT                                允许长度0~65535字节
+                MEDIUMTEXT                          允许长度0~167772150字节
+                LONGTEXT                            允许长度0~4294967295字节
+                VARBINARY(M)            M           允许长度0~M个字节的边长字节字符集
+                BINARY(M)               M           允许长度0~M个字节的定长字节字符集
+
+                　CHAR和VARCHAR很类似，都是用来保存Mysql中较短的字符串，主要区别在于:CHAR列的长度固定为创建表时声明的长度，长度可以为从0~255的任何值，而VARCHAR的值可以是变长字符串，长度可以指定0~65535之间的值，在检索的时候，CHAR列会删除尾部的空格而VARCHAR则保留了这些空格。
+
+                ENUM类型：
+                　　枚举类型，它的值范围需要在创建表时通过枚举方式显示指定，对1~255个成员的枚举需要1个字节存储，对于255~65535个成员，需要2个字节存储，最多允许65535个成员。
+                    可以看出来ENUM类型是忽略大小写的，还可以看出对于插入不在ENUM指定范围内的值时，并有警告，而是成功插入，并且是enum('M','F')的第一个值M,而且只允许从值集合中选取单个值，不能一次取多个值。
+
+                SET类型：
+                    SET和enum非常相似，里面可以包含0~64个成员，根据成员的不用，存储上也有不同。
+                    1~8成员的集合，占1个字节
+                    9~16成员的集合，占2个字节
+                    17~24成员的集合，占3个字节
+                    25~32成员的集合，占4个字节
+                    33~64成员的集合，占8个字节
+                    set类型一次可以选取多个成员，而ENUM则只能选一个，就相当于ENUM是单选，而set是复选。
+                    set类型可以从允许值的集合中选择任意1个或多个元素进行组合，所以对于输入的值只要是在允许值的组合范围内，都可以正确的写入到set类型中，对于超过的允许值范围是不能写入的；
+
+
+
+                打开数据库：
+
+                    USE
+                        作用：打开数据库；
+                        用法：  USE database_name;
+
+                    SELECT DATABASE();  ------->  查看当前打开的数据库；
+
+
+
+                数据表创建：
+
+                    CREATE TABLE [IF NOT EXISTS] table_name (
+                        column_name data_type [is_null],
+                        .....
+                    )
+                    (data_type:UNSIGNED --->表示无符号，无负数)
+                    (is_null:NULL --->表示可以为空值)
+                    (is_null:NOT NULL --->表示不可以为空值)
+
+
+                数据表查看：
+
+                    语法：SHOW TABLES [FROM db_name] [LIKE 'pattern' | WHERE expr];
+                    解释：显示db_name数据库中的数据表，并且符合
+
+                查看数据表结构：
+
+                    语法：SHOW COLUMNS FROM table_name;
+                    解释：查看数据表table_name的结构；
+
+
+                数据表插入记录：
+                    解释：插入一行数据；
+
+                    语法一：INSERT [INFO] table_name [(col_name,...)] VALUES([val,...]);
+                    注意：如果省略列名，则表示对一行所有字段数据的写入；
+                    （如果全部赋值，其中存在AUTO_INCREMENT字段，则该字段可设置为NULL或DEFAULT，这样字段就会自动编号下去；）
+
+
+                    语法二：INSERT [INTO] table_name SET col_name = {expr | DEFAULT},....;
+                    说明：与第一种方式的区别在于，此方法可以使用子查询（SubQuery）
+
+                    语法三： INSERT [INTO] table_name [(col_name,...)] SELECT ...;
+                    说明： 此方法可以将查询结果插入到指定数据表；
+
+
+
+                数据表记录更新（单表更新）：
+                    语法：UPDATE [LOW_PRIORITY] [IGNORE] table_reference SET col_name1={expr1|DEFAULT} [,col_name2={expr2|DEFAULT}]... [WHERE where_condition];
+                    解释：单表更新；
+                    注意：如果不写WHERE，则表示匹配所有；
+
+
+
+                数据表删除记录（单表删除）：
+                    语法：DELETE FROM table_name [WHERE where_condition];
+                    解释：如果不写WHERE,则表示匹配所有表中数据；
+
+
+
+                数据表记录查找：
+                    解释：
+                    语法：SELECT expr,... FROM table_name;  (其中 expr表示对 表中字段名的筛选)；
+
+                    详细语法：SELECT select_expr [,select_expr ...]
+                                [
+                                    FROM table_reference
+                                    [WHERE where_condition]
+                                    [GROUP BY {col_name|position} [ASC | DESC],...]
+                                    [HAVING where_condition]
+                                    [ORDER BY {col_name | expr | position} [ASC|DESC],...]
+                                    [LIMIT {[offset,] row_count | row_count OFFSET offset}]
+                                ]
+
+
+                    查询表达式：
+                        1，每一个表达式表示想要的一列，必须有至少一个。
+                        2，多个列之间，以英文逗号分隔。
+                        3，星号（*）表示所有列。table_name.*可以表示命名表的所有列。
+                        4，查询表达式可以使用[AS] alias_name为其赋予别名。 （最好加上AS，作为添加别名）
+                        5，别名可用于GROUP BY，ORDRE BY或HAVING子句。
+
+                    条件表达式：
+                        1，对记录进行过滤，如果没有指定WHERE子句，则显示所有记录；
+                        2，在WHERE表达式中，可以使用MYSQL支持的函数或运算符；
+
+
+                    查询结果分组：
+                        语法：[GROUP BY {col_name|position} [ASC|DESC],...];
+                        解释：将查询结果按不同的值进行分组；
+
+                    分组条件：
+                        语法：[HAVING where_condition];
+                        注意：where_condition 中的字段，需要在SELECT中出现；比如---SELECT sex,age FROM dt7 GROUP BY sex HAVING age>15;
+                        (where_condition可以是聚合函数，可以是出现在查询中的字段运算表达式)
+
+
+                    对查询结果进行排序：
+                        语法：[ORDER BY {col_name | expr | position} [ASC|DESC]];
+
+
+                    限制查询结果返回的数量：
+                        语法：[LIMIT {[offset,] row_count | row_count OFFSET offset}];
+                        注意：row_count 从零开始计数；
+                        (常用于分页)
+
+
+                数据表删除记录：
+                    语法：
+
+
+
+                数据表删除字段：
+                    语法： ALTER TABLE table_name DROP data_type;
+
+
+
+                数据表自动编号：
+                    语法： AUTO_INCREMENT;
+                    解释： 自动编号，且必须与主键组合；
+                           默认情况下，起始值为1，每次的增量为1；
+
+
+                数据表的约束：
+
+                    1.约束保证数据的完整性和一致性；
+                    2.约束分为表级约束和列级约束。（列级约束----对一个数据列建立的约束；表级约束----对多个数据列建立的约束。）(劣迹约束既可以在列定义时声明，也可以在列定义后声明。表级约束只能在列定义后声明。一般，我们多使用列级约束！)
+                    3，约束类型主要有以下5种：
+
+                        主键约束：
+                            语法： PRIMARY KEY;
+                            1，每张数据表只能存在一个主键；（比如应用于id,id作为整张表中唯一的主键；）
+                            2，主键保证记录的唯一性；（指主键的值不能重复，比如id值不能重复）
+                            3，主键自动为NOT NULL；
+                            （主键不一定是AUTO_INCREMENT,但AUTO_INCREMENT一定是主键；）
+
+                        唯一约束：
+                            语法： UNIQUE KEY；
+                            1，每张数据表可以存在多个唯一约束； （比如应用于 username，username在整张表中不能重复，同时还可以有别的字段也可以不能重复；）
+                            2，唯一约束可以保证记录的唯一性；
+                            3，唯一约束的字段可以为空值（NULL）；
+
+
+                        默认约束：
+                            语法：DEFAULT;（只有列级约束；）
+                            解释：当插入记录时，如果没有明确为字段赋值，则自动赋予默认值；
+
+
+                        非空约束：
+                            语法：NULL 或 NOT NULL；（只有列级约束；）
+                            NULL： 表示字段值可以为空；
+                            NOT NULL：表示字段值不能为空；
+
+
+                        外键约束：
+                            语法：FOREING KEY;
+                            作用：1，保持数据一致性，完整性；
+                                  2，实现一对一或一对多关系；
+
+                            外键约束：
+                                1,父表和子表必须使用相同的存储引擎，而且禁止使用临时表；
+                                    （子表：具有外键列的表；父表：子表所参照的表；）
+                                2，数据表的存储引擎只能为InnoDB;
+                                3,外键列和参照列必须具有相似的数据类型。其中数字的长度或是否有符号位必须相同，而字符的长度则可以不同；
+                                    (主键会自动创建索引；)
+                                4，外键列和参照列必须创建索引。如果外键不存在索引的话，MYSQL将自动创建索引。（如果参照列没有索引的话，MYSQL自动创建索引，如果外键列没有索引，MYSQL将不会创建索引）
+
+                            使用示例：FOREIGN KEY (pid) REFERENCES province (id);
+
+
+                        查看表格的索引：
+                                SHOW INDEXES FROM table_name \G;-----> 显示这个表格的索引； （\G----表示以网格形式显示；）
+
+
+
+                        外键约束的参照操作：
+                            使用：在实际项目开发中，不使用此物理外键，而使用逻辑外键（物理外键只支持innodb引擎）；
+                            约束：
+                                1，CASCADE:从父表删除或更新且自动删除或更新子表中的匹配的行；
+                                2，SET NULL:从父表删除或更新行，并设置子表中的外键列为NULL。如果使用该选项，必须保证子表列没有指定NOT NULL；
+                                3，RESTRICT:拒绝对父表的删除或更新操作；
+                                4，NO ACTION: 标准SQL的关键字，在MYSQL中与RESTRICT相同；
+
+
+                                示例： FOREIGN KEY (pid) REFERENCES province (id) ON  DELETE CASCADE;
+
+
+                        数据表列的添加和修改：
+
+                            列的增加语法： ALTER TABLE table_name ADD [COLUMN] col_name column_definition [FIRST | AFTER col_name];
+                                多列添加： ALTER TABLE table_name ADD [COLUMN] (col_name column_definition,.....);
+                            列的删除语法： ALTER TABLE table_name DROP [COLUMN] col_name;
+
+
+                        数据表的约束修改：
+
+                            添加主键约束：
+                                语法：ALTER TABLE table_name ADD [CONSTRAINT [symbol]] PRIMARY KEY [index_type] (index_col_name,...);
+                            删除主键约束：
+                                语法：ALTER TABLE table_name DROP PRIMARY KEY;
+
+
+                            添加唯一约束：
+                                语法：ALTER TABLE table_name ADD [CONSTRAINT [symbol]] UNIQUE [INDEX | KEY][index_name] [index_type](index_col_name,...);
+                            删除唯一约束：
+                                语法：ALTER TABLE table_name DROP {INDEX | KEY} index_name;  (----> {}中表示必须二选一)
+
+
+                            添加外键约束：
+                                语法：ALTER TABLE table_name ADD [CONSTRAINT [symbol]] FOREIGN KEY [index_name] (index_col_name,...) REFERENCES table_name (index_name);
+                            删除外键约束：
+                                语法：ALTER TABLE table_name DROP FOREIGN KEY fk_symbol; (fk_symbol通过 SHOW CREATE TABLE table_name可以查看得知；)
+
+
+                            添加/删除默认约束：
+                                语法：ALTER TABLE table_name ALTER [COLUMN] col_name {SET DEFAULT literal | DROP DEFAULT };
+
+
+                    数据表的列修改：
+
+                            修改列定义：
+                                语法：ALTER TABLE table_name MODIFY [COLUMN] col_name column_definition [FIRST | AFTER col_name];
+
+                            修改列名称：
+                                语法：ALTER TABLE table_name CHANGE [COLUMN] old_col_name new_col_name column_definition [FIRST | AFTER col_name];
+
+
+                    数据表更名：
+                        方法一：
+                            语法：ALTER TABLE table_name RENAME [TO|AS] new_table_name;
+
+                        方法二：
+                            语法：RENAME TABLE table_name TO new_table_name [,table_name TO new_table_name];
+
+
+
+
+
+            子查询：
+
+                定义：子查询（Subquery）是指出现在其他SQL语句内的SELECT字句。
+
+                注意：子查询指嵌套在查询内部，且必须始终出现在圆括号内。
+
+                例如：
+                    SELECT * FROM t1 WHERE col1 = (SELECT col2 FROM t2);
+                    其中，SELECT * FROM t1，称为Outer Query / Outer Statement；
+                    SELECT col2 FROM t2，称为SubQuery；
+
+
+                子查询可以包含多个关键字或条件，
+                    如 DISTINCT 、 GROUP BY 、ORDER BY、LIMIT、函数等。
+
+                子查询的外层查询可以是：SELECT , INSERT , UPDATE , SET , DO；
+
+                子查询可以返回标量、一行、一列或子查询；
+
+
+
+                使用比较运算符的子查询：
+                    =、>、 <、 >=、 <=、 <>、 !=、 <=>;
+
+                    语法结构：operand comparison_operator subquery;
+
+                              operand comparison_operator ANY (subquery);  (大于最小的)
+
+                              operand comparison_operator SOME (subquery); （SOME 和 ANY 功能几乎差不多，SOME更多用于多重等于的情况）
+
+                              operand comparison_operator ALL (subquery); （大于最大的）
+
+                使用 [NOT] IN 的子查询：
+                    语法结构：operand comparison_operator [NOT] IN (subquery);
+                     = ANY 运算符与 IN 等效；
+                    != ALL 或 <>ALL 运算符与NOT IN等效；
+
+
+                使用 [NOT] EXISTS的子查询：
+                    如果子查询返回任何行，EXISTS将返回TRUE，否则返回FALSE；
+
+
+                将查询结果写入数据表：
+                    语法：INSERT [INTO] table_name [(col_name,...)] SELECT...;
+                    比如：INSERT tbd_goods(brand_name) SELECT brand_name FROM tbd_goods2 GROUP BY brand_name;
+
+
+                多表更新：
+                    语法：UPDATE table_reference SET col_name1 = {expr1|DEFAULT} [.col_name2 = {expr2|DEFAULT}]... [WHERE where_condition];
+
+
+                创建表格同时载入查询数据：
+                    语法：CREATE TABLE [IF NOT EXISTS] table_name [(create_definition,...)] select_statement;
+
+
+
+        连接类型：
+            1，INNER JOIN -----内连接
+            2, LEFT [OUTER] JOIN -----左外连接
+            3, RIGHT [OUTER] JOIN -----右外连接
+
+            -------在MySQL中，JOIN / CROSS JOIN / INNER JOIN是等价的；
+
+
+        连接条件：
+            使用ON关键字来设定连接条件，也可以使用WHERE来代替；
+
+            ON：通常，使用ON关键字来设定连接条件；
+            WHERE：使用WHERE 关键字进行结果集记录的过滤；
+
+
+            内连接：
+                概念：两个表中符合连接条件的那一部分的相同数据，实际上，就是找出两表交集的那些记录；
+
+            左外连接：
+                概念：包括了左表中全部，右表中和左边相同的那一部分，实际上，就是找出左表全部的记录，与右表部分记录；
+
+            右外连接：
+                概念：包括了右表中全部，左表中与右边相同的那一部分，实际上，就是找出右表全部的记录，与左表部分记录；
+
+            自身连接：
+                概念：同一个数据表对其自身进行连接。
+
+
+            多表删除：
+                语法：DELETE table_name[.*] [,table_name[.*]].... FROM table_reference [WHERE where_condition]；
+
+
+
+        函数类型：
+            1，字符函数；
+            2，数值运算符与函数；
+            3，比较运算符与函数；
+            4，日期时间函数；
+            5，信息函数；
+            6，聚合函数；
+            7，加密函数；
+
+
+            字符串函数：
+            （1）CHAR_LENGTH(str)
+            计算字符串字符个数
+
+            （2）CONCAT(s1,s2，...)
+            返回连接参数产生的字符串，一个或多个待拼接的内容，任意一个为NULL则返回值为NULL
+
+            （3）CONCAT_WS(x,s1,s2,...)
+            返回多个字符串拼接之后的字符串，每个字符串之间有一个x
+
+            （4）INSERT(s1,x,len,s2)
+            返回字符串s1，其子字符串起始于位置x，被字符串s2取代len个字符
+
+            （5）LOWER(str)和LCASE(str)、UPPER(str)和UCASE(str)
+            前两者将str中的字母全部转换成小写，后两者将字符串中的字母全部转换成大写
+
+            （6）LEFT(s,n)、RIGHT(s,n)
+            前者返回字符串s从最左边开始的n个字符，后者返回字符串s从最右边开始的n个字符
+
+            （7）LPAD(s1,len,s2)、RPAD(s1,len,s2)
+            前者返回s1，其左边由字符串s2填补到len字符长度，假如s1的长度大于len，则返回值被缩短至len字符；前者返回s1，其右边由字符串s2填补到len字符长度，假如s1的长度大于len，则返回值被缩短至len字符
+
+            （8）LTRIM(s)、RTRIM(s)
+            前者返回字符串s，其左边所有空格被删除；后者返回字符串s，其右边所有空格被删除
+
+            （9）TRIM(s)
+            返回字符串s删除了两边空格之后的字符串
+
+            （10）TRIM(s1 FROM s)
+            删除字符串s两端所有子字符串s1，未指定s1的情况下则默认删除空格
+
+            （11）REPEAT(s,n)
+            返回一个由重复字符串s组成的字符串，字符串s的数目等于n
+
+            （12）SPACE(n)
+            返回一个由n个空格组成的字符串
+
+            （13）REPLACE(s,s1,s2)
+            返回一个字符串，用字符串s2替代字符串s中所有的字符串s1
+
+            （14）STRCMP(s1,s2)
+            若s1和s2中所有的字符串都相同，则返回0；根据当前分类次序，第一个参数小于第二个则返回-1，其他情况返回1
+
+            （15）SUBSTRING(s,n,len)、MID(s,n,len)
+            两个函数作用相同，从字符串s中返回一个第n个字符开始、长度为len的字符串
+
+            （16）LOCATE(str1,str)、POSITION(str1 IN str)、INSTR(str,str1)
+            三个函数作用相同，返回子字符串str1在字符串str中的开始位置（从第几个字符开始）
+
+            （17）REVERSE(s)
+            将字符串s反转
+
+            （18）ELT(N,str1,str2,str3,str4,...)
+            返回第N个字符串
+
+            （19）FORMAT(X,D[,locale])
+                以格式‘#,###,###.##’格式化数字X
+            　　D指定小数位数
+            　　locale指定国家语言(默认的locale为en_US)
+
+            （20）WHERE...LIKE(s,expr) [ESCAPE]
+                 模式匹配
+                 expr中，用%表示任意字符，比如匹配t%om，可用----SELECT username FROM table_1 WHERE username LIKE ('%\%%');
+                 中间\表示转义 %，两边的%表示任意字符，也可以用-----SELECT username FROM table_1 WHERE username LIKE ('%1%%') ESCAPE '1';
+
+
+
+
+        数值运算符和函数：
+            CEIL(x)
+                返回不小于 x 的最小整数，也就是说得大于或等于x的最小整数
+
+            DIV
+                整数除法
+
+            CEIL(x)
+                返回不小于 x 的最小整数，也就是说得大于或等于x的最小整数
+
+            MOD(x，y)
+                返回数字x除以y后的余数 --- x mod y
+
+            POWER()
+                幂运算
+
+            ROUND(X[,D])
+                将数字X四舍五入到指定的小数位数D
+                ①如果不指定D，则默认为0
+                ②如果D是负数，表示从小数点的左边进行四舍五入
+
+            TRUNCATE(X,D)
+                将数字X截断到指定的小数位数D（不四舍五入）
+                ①如果D为0，表示不要小数
+                ②如果D是负数，表示从小数点的左边进行截断
+
+            ABS(x)
+                返回 x 的绝对值
+
+            RAND()
+                返回一个随机浮点数v(0<=v<1.0)
+
+
+         比较运算函数：
+            [NOT] BETWEEN ... AND ...
+                说明：expr between min and max
+                　　如果expr大于或等于表达式是否小于或等于最大和最小之间，返回1，否则返回0。
+                　　如果所有参数的类型相同，这相当于表达式(min<=expr和expr<=max)。否则会进行相应的类型转换。
+
+            COALESCE(value1,...)
+                返回第一个非NULL的参数
+            　　说明：返回列表中第一个非空值，如果没有非NULL值，则返回NULL。
+
+            GREATEST(value1,value2,...)
+            　　说明：返回参数列表中最大的参数
+
+            [not] IN(value,...)
+                检查值是否在数据集中
+            　　说明：expr IN (value,...); 如果expr等于values列表中的任何一个值则返回true，否则返回false；
+            　　如果value列表全是常数，mysql会根据expr的类型进行排序，然后进行二进制查找，这样非常快速。
+
+            [not] IS NULL(expr)
+            　　说明：如果expr为NULL，返回1，否则返回 0；
+
+            <=>
+            　　说明：该操作符是安全的NULL比较符号，此运算符执行相等比较类似=运算符，但如果两个操作数为NULL，则返回1，而不是NULL，如果一个操作数为NULL返回0，而不是NULL。
+
+            IS boolean value
+            　　说明：测试值是否为boolean值，boolean的值可以是TRUE,FALSE或者UNKNOW
+
+            INTERVAL(N,N1，N2，...)
+            　　说明：N < N1返回0，N < N2返回1，一次类推。如果N为NULL返回-1.所有的参数作为整数看待，要求参数满足N1<N2<...<Nn,这样能够快速的进行这版查找
+
+            LEAST(value1,value2,...)
+            　　说明：返回value列表中的最小值。
+            　　如果所有的参数都是NULL，则结果也是NULL，不需要进行比较
+            　　如果所有参数都是整数，则会返回一个整数，进行整数比较
+            　　如果所有参数是实数，则返回一个实数，进行实数比较
+            　　如果参数是由 数字和字符串构成，参数将作为数字进行比较
+            　　如果所有参数都是非二进制的字符串，则作为非二进制字符计较
+            　　其它情况，将参数统统作为二进制比较
+
+
+        常见日期函数：
+            NOW()           返回当前的日期和时间
+            CURDATE()       返回当前的日期
+            CURTIME()       返回当前的时间
+            DATE()          提取日期或日期/时间表达式的日期部分
+            EXTRACT()       返回日期/时间按的单独部分
+            DATE_ADD()      给日期添加指定的时间间隔
+            DATE_SUB()      从日期减去指定的时间间隔
+            DATEDIFF()      返回两个日期之间的天数
+            DATE_FORMAT()   用不同的格式显示日期/时间
+
+
+
+        常见信息函数：
+            DATABASE()                  返回当前数据库名
+            BENCHMARK(count,expr)       将表达式expr重复运行count次
+            CONNECTION_ID()             返回当前客户的连接ID
+            FOUND_ROWS()                返回最后一个SELECT查询进行检索的总行数
+            USER()或SYSTEM_USER()       返回当前登陆用户名
+            VERSION()                   返回MySQL服务器的版本
+
+
+        常用聚合函数：
+            1.COUNT()函数：用来统计记录的条数；
+            2.SUM()函数：是求和函数；
+            3.AVG()函数：是求平均值的函数 ;
+            4.MAX()函数：是求最大值的函数
+            5.MIN()函数：是求最小值的函数
+
+
+        加密函数：
+            MD5(str) md5加密
+            SELECT MD5('hello')
+            5d41402abc4b2a76b9719d911017c592
+
+            sha(str) sha加密
+            SELECT SHA('hello')
+            aaf4c61ddcc5e8a2dabede0f3b482cd9aea9434d
+
+            sha1(str) sha1加密
+            SELECT SHA1('hello')
+            aaf4c61ddcc5e8a2dabede0f3b482cd9aea9434d
+
+            encode(str,key) 和 decode(str,key) 使用key作为密钥加密解密字符串str
+            SELECT DECODE(ENCODE("hello","password"),"password")
+            hello
+
+            rand()函数获取随机数:
+                1、随机获取一条数据：ORDER BY RAND();
+                2、获取随机数0-1范围：SELECT RAND();
+                3、取整
+                1：SELECT CEIL(RAND());
+                1：SELECT CEILING(RAND());
+                0：SELECT FLOOR(RAND());
+                4、CEIL(RAND()*N)的取值范围：1-N
+                5、取x-y之间的随机数：SELECT (CEIL(RAND() * (y-x+1)) + (x-1));
+                    随机取整数3或4：SELECT (CEIL(RAND() * 2) + 2);
+                    随机取整数100-150：SELECT (CEIL(RAND() * 51) + 99);
+
+            其他：
+                AES_ENCRYPT(str,key)
+                    返回用密钥key对字符串str利用高级加密标准算法加密后的结果，调用AES_ENCRYPT的结果是一个二进制字符串，以BLOB类型存储
+                AES_DECRYPT(str,key)
+                    返回用密钥key对字符串str利用高级加密标准算法解密后的结果
+                ENCRYPT(str,salt)
+                    使用UNIXcrypt()函数，用关键词salt(一个可以惟一确定口令的字符串，就像钥匙一样)加密字符串str
+                PASSWORD(str)
+                    返回字符串str的加密版本，这个加密过程是不可逆转的，和UNIX密码加密过程使用不同的算法。
+
+
+
+        修改结束符： DELIMITER  //;  (//表示你想加的那个符号)
+
+
+        创建和删除自定义函数语法：
+
+            自定义函数：简称UDF；
+
+            创建UDF：
+            　　CREATE [AGGREGATE] FUNCTION function_name(parameter_name type,[parameter_name type,...])
+            　　RETURNS {STRING|INTEGER|REAL}
+            　　runtime_body
+            简单来说就是：
+            　　CREATE FUNCTION 函数名称(参数列表)
+            　　RETURNS 返回值类型
+            　　函数体
+
+            删除UDF：
+            　　DROP FUNCTION function_name
+
+            调用自定义函数语法：
+            　　SELECT function_name(parameter_value,...)
+
+            语法示例：
+                创建简单的无参UDF：
+                    CREATE FUNCTION simpleFun() RETURNS VARVHAR(20) RETURN "Hello World!";
+                    说明：
+                    UDF可以实现的功能不止于此,UDF有两个关键点,一个是参数,一个是返回值,UDF可以没有参数,但UDF必须有且只有一个返回值
+
+            复合结构定义语法：
+                在函数体中,如果包含多条语句,我们需要把多条语句放到BEGIN...END语句块中
+
+            DELIMITER //
+            CREATE FUNCTION IF EXIST deleteById(uid SMALLINT UNSIGNED)
+            RETURNS VARCHAR(20)
+            BEGIN
+            DELETE FROM son WHERE id = uid;
+            RETURN (SELECT COUNT(id) FROM son);
+            END//
+
+            修改默认的结束符语法：
+                DELIMITER // 意思是修改默认的结束符";"为"//",以后的SQL语句都要以"//"作为结尾
+                特别说明:
+                UDF中,REURN语句也包含在BEGIN...END中
+
+
+            自定义函数中定义局部变量语法：
+                DECLARE var_name[,varname]...date_type [DEFAULT VALUE];
+                简单来说就是：
+                    DECLARE 变量1[,变量2,... ]变量类型 [DEFAULT 默认值]
+                    这些变量的作用范围是在BEGIN...END程序中,而且定义局部变量语句必须在BEGIN...END的第一行定义
+                    示例：
+                    DELIMITER //
+                    CREATE FUNCTION addTwoNumber(x SMALLINT UNSIGNED, Y SMALLINT UNSIGNED)
+                    RETURNS SMALLINT
+                    BEGIN
+                        DECLARE a, b SMALLINT UNSIGNED DEFAULT 10;
+                        SET  a = x, b = y;
+                        RETURN a+b;
+                    END//
+                    上边的代码只是把两个数相加,当然,没有必要这么写,只是说明局部变量的用法,还是要说明下:这些局部变量的作用范围是在BEGIN...END程序中
+
+
+
+
+        mysql语句执行过程：
+            SQL语句---> MySQL引擎（分析）---->语法正确----->可识别命令（执行）---->执行结果----->(返回)客户端;
+
+
+
+        存储过程：
+            概念：存储过程是SQL语句与控制语句的预编译集合，以一个名称存储并作为一个单元处理；
+
+            存储过程的优点：
+                1，增强SQL语句的功能与灵活性；
+                2，实现较快的执行速度；
+                3，减少网络流量；
+
+
+        创建存储过程：
+            语法：CREATE [DEFINER = {user | CURRENT_USER}] PROCEDURE sp_name ([proc_parameter[,...]])
+                    [characteristic..] routine_body
+
+                    其中：proc_parameter:[IN | OUT | INOUT] param_name type
+                            IN:表示该参数的值，必须在调用储存过程时指定；
+                            OUT:表示该参数的值可以被存储过程改变，并且可以返回；
+                            INPUT:表示该参数的调用指定，并且可以被改变和返回；
+
+
+        存储过程体：
+            1，过程体由合法的SQL语句构成；
+            2，过程体可以是任意的SQL语句；
+            3，过程体如果为复合结构则使用BEGIN...END语句；
+            4，复合结构可以包含声明、循环、控制结构；
+
+
+        调用存储过程：
+            语法：1，CALL sp_name([parameter[,...]]);
+                  2，CALL sp_name[()]
+
+        删除存储过程：
+            语法：DROP PROCEDURE [IF EXISTS] sp_name;
+
+
+        修改储存过程：
+            语法：ALTER PROCEDURE sp_name [characteristic...] COMMENT 'string' | {CONTAINS SQL | NO SQL | READS SQL DATA |MODIFIES SQL DATA} | SQL SECURITY { DEFINER | INVOKER }  (不能修改过程体，只能删除)
+
+
+        局部变量：
+            定义：以 @param表示。存在于BEGIN...END之间的变量，为局部变量，会被程序走完销毁；
+
+        用户变量：
+            定义： 直接 SELECT @param; 为用户变量；
+
+
+
+        存储过程与自定义函数的区别：
+            1）一般来说，存储过程实现的功能要复杂一点，而函数的实现的功能针对性比较强。存储过程，功能强大，可以执行包括修改表等一系列数据库操作；用户定义函数不能用于执行一组修改全局数据库状态的操作。
+
+            2）对于存储过程来说可以返回参数，如记录集，而函数只能返回值或者表对象。函数只能返回一个变量；而存储过程可以返回多个。存储过程的参数可以有IN,OUT,INOUT三种类型，而函数只能有IN类~~存储过程声明时不需要返回类型，而函数声明时需要描述返回类型，且函数体中必须包含一个有效的RETURN语句。
+
+            3）存储过程，可以使用非确定函数，不允许在用户定义函数主体中内置非确定函数。
+
+            4）存储过程一般是作为一个独立的部分来执行（ EXECUTE 语句执行），而函数可以作为查询语句的一个部分来调用（SELECT调用），由于函数可以返回一个表对象，因此它可以在查询语句中位于FROM关键字的后面。
+
+            SQL语句中不可用存储过程，而可以使用函数。
+
+
+        存储过程注意事项：
+            1，创建存储过程或自定义函数时，需要通过delimiter语句修改定界符；
+            2，如果函数体或过程体有多个语句，需要包含在BEGIN...END语句块中。
+            3，存储过程通过call来调用；
+
+
+
+        存储引擎：
+            MYSQL可以将数据以不同的技术存储在文件（内存）中，这种技术就称为存储引擎。每一种存储引擎使用不同的存储机制、索引技巧、锁定水平，最终提供广泛且不同的功能。
+
+            MySQL支持的存储引擎：MyISAM/InnoDB/Memory/CSV/Archive；
+
+            并发控制：
+                ----当多个连接对记录进行修改时保证数据的一致性和完整性。
+
+                1、锁：
+                    -- 共享锁（读锁）：在同一时间段内，多个用户可以读取同一个资源，读取过程中数据不会发生任何变化；
+                    -- 排他锁（写锁）：在任何时候只能有一个用户写入资源，当进行写锁时会阻塞其他的读锁或者写锁操作。
+
+
+                    锁颗粒：
+                        -- 表锁，是一种开销最小的锁策略，一张表一个锁。
+                        -- 行锁，是一种开销最大的锁策略，每一行都有一个锁。
+
+
+                2、事务：
+                    -- 事务用于保证数据库的完整性；
+                        例如：
+                            实现步骤： 用户A，转账200元给，用户B。
+                                        1，从当前账户减掉200元（账户余额大于等于200元）；
+                                        2，在对方账户增加200元；
+                                        如果操作失败，则恢复原始状态；
+
+                    事务的特性（ACID）：
+                        -- 原子性
+                        -- 一致性
+                        -- 隔离性
+                        -- 持久性
+
+
+                3、外键：
+                    -- 是保证数据一致性的策略。
+
+                4、索引：
+                    -- 是对数据表中一列或多列的值进行排序的一种结构； （相当于书的目录）
+                    包括：普通索引、唯一索引、全文索引...；
+
+
+
+            MySQL常用存储引擎的适用环境：
+                MyISAM：默认的MySQL插件式存储引擎，它是在Web、数据仓储和其他应用环境下最常使用的存储引擎之一
+                InnoDB：用于事务处理应用程序，具有众多特性，包括ACID事务支持。
+                Memory：将所有数据保存在RAM中，在需要快速查找引用和其他类似数据的环境下，可提供极快的访问。
+                Merge：允许MySQL DBA或开发人员将一系列等同的MyISAM表以逻辑方式组合在一起，并作为1个对象引用它们。对于诸如数据仓储等VLDB环境十分适合。
+
+
+            常用两种引擎的选择：
+
+            MyISAM与InnoDB
+                InnoDB和MyISAM是许多人在使用MySQL时最常用的两个表类型，这两个表类型各有优劣，视具体应用而定。
+                基本的差别为： MyISAM类型不支持事务处理等高级处理，而InnoDB类型支持。MyISAM类型的表强调的是性能，其执行数度比InnoDB类型更快，但是不提供事务支持，而InnoDB提供事务支持以及外部键等高级数据库功能。
+                所以从宏观来讲，事务数据库关注细节，而数据仓库关注高层次的聚集，所以，InnoDB更适合作为线上的事务处理，而MyISAM更适合作为ROLAP型数据仓库。
+
+                InnoDB引擎适合线上事物型数据库：
+                    1.InnoDB引擎表是基于B+树的索引组织表(IOT)；
+
+                    2.每个表都需要有一个聚集索引(clustered index)；
+
+                    3.所有的行记录都存储在B+树的叶子节点(leaf pages of the tree)；
+
+                    4.基于聚集索引的增、删、改、查的效率相对是最高的；
+
+                    5.如果我们定义了主键(PRIMARY KEY)，那么InnoDB会选择器作为聚集索引；
+
+                    6.如果没有显式定义主键，则InnoDB会选择第一个不包含有NULL值的唯一索引作为主键索引；
+
+                    7.如果也没有这样的唯一索引，则InnoDB会选择内置6字节长的ROWID作为隐含的聚集索引(ROWID随着行记录的写入而主键递增，这个ROWID不像ORACLE的ROWID那样可引用，是隐含的)。
+
+                MYISAM引擎适用于ROLAP数据仓库：
+                    1.读取效率：数据仓库的高并发上承载的大部分是读， MYISAM强调的是性能，每次查询具有原子性,其执行数度比InnoDB类型更快。
+
+                    2. 存储空间：MyISAM： MyISAM的索引和数据是分开的，并且索引是有压缩的，内存使用率就对应提高了不少。InnoDB：需要更多的内存和存储，它会在主内存中建立其专用的缓冲池用于高速缓冲数据和索引。
+
+                    3. MyISAM可移植性备份及恢复：MyISAM：数据是以文件的形式存储，所以在跨平台的数据转移中会很方便。在备份和恢复时可单独针对某个表进行操作。InnoDB：免费的方案可以是拷贝数据文件、备份 binlog，或者用 mysqldump，在数据量达到几十G的时候就相对痛苦了。移植过程中MyISAM不受字典数据的影响。
+
+                    4.从接触的应用逻辑来说，select count(*) 和order by 是最频繁的，大概能占了整个sql总语句的60%以上的操作，而这种操作Innodb其实也是会锁表的，很多人以为Innodb是行级锁，那个只是where对它主键是有效，非主键的都会锁全表的。但MYISAM对于count操作只需要在元数据中读取，不用扫表。
+
+                    5.如果和MyISAM比insert写操作的话，Innodb还达不到MyISAM的写性能，如果是针对基于索引的update操作，虽然MyISAM可能会逊色Innodb,但是那么高并发的写，从库能否追的上也是一个问题，且不建议数据仓库中频繁update数据。
+
+                    6.如果是用MyISAM的话，merge引擎可以大大加快数据仓库开发速度，非常适合大项目总量约几亿的rows某一类型(如日志，调查统计)的业务表。
+
+                    7.全文索引：MyISAM：支持 FULLTEXT类型的全文索引。InnoDB：不支持FULLTEXT类型的全文索引，但是innodb可以使用sphinx插件支持全文索引，并且效果更好。
+
+                    8.表主键：MyISAM：允许没有任何索引和主键的表存在，索引都是保存行的地址。InnoDB：如果没有设定主键或者非空唯一索引，就会自动生成一个6字节的主键(用户不可见)，数据是主索引的一部分，附加索引保存的是主索引的值。
+
+                    9.对于AUTO_INCREMENT类型的字段，InnoDB中必须包含只有该字段的索引，但是在MyISAM表中，可以和其他字段一起建立联合索引。
+
+                    10. MyISAM不支持外键，需通过其他方式弥补。
+
+
+
+
+            修改存储引擎的方法：
+                1， 通过修改MySQL配置文件实现；
+                        default-storage-engine = engine；
+
+                2，通过创建数据表命令实现;
+                        CREATE TABLE table_name (
+                            ...
+                            ...
+                        )ENGINE = engine;
+
+                3,通过修改数据表命令实现；
+                    ALTER TABLE table_name ENGINE [=] engine_name;
