@@ -1,3 +1,37 @@
+﻿配置Git
+
+1.在任意地方，新建文件夹，为防止出错，最好保证该文件夹目录都是英文。
+
+2.打开新建文件夹，空白处右键，菜单中选择 Git Bash here ，弹出命令行，输入命令 git init ，目录下会生成一个新的 .git的文件夹，用于本地代码仓库。
+
+ 
+
+3.配置本地仓库的账号和邮箱
+
+$ git config --global user.name "Your Name"
+$ git config --global user.email "email@example.com"
+4.为了避免每次远程访问需要输密码，将使用ssh登陆。ssh应该与本机信息绑定。查看自己电脑 C:\Users\Administrator 目录下是否有 .ssh 文件夹。如果没有就需要生成。
+
+$ ssh-keygen -t rsa -C "youremail@example.com"
+按 Enter 键一直到结束。
+
+5.ssh只是本地详细，需要在Github中备份，才能被验证。打开自己的Github，在My Profile中，点击Add Public Key，title随意。
+
+6.key中的内容在本机C盘中，C:\Users\Administrator，里面有个.ssh文件夹，用文本文档打开 id_rsa.pub ，将里面的内容全部复制到key中，即可
+
+7.到此配置完毕，我们需要获取Github上项目的地址，每个项目地址不同，一般在Github的Projects中，能找到跟你相关的所有项目，点开一个项目，就能看到项目地址，然后在Git Bash here 中输入：
+
+$ git clone git@github.com:michaelliao/gitskills.git
+git clone 后面是需要克隆的项目地址
+
+8.将远程仓库数据同步到本地，一般是
+
+$ git pull origin master
+即可完成同步。
+
+9.命令git checkout 可以切换分支，方便开发管理。还有很多git命令，可以自己学习。
+
+
 
 git提交代码到github步骤：
     第一步：建立git仓库
